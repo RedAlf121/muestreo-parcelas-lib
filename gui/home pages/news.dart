@@ -148,7 +148,7 @@ class NewsPage extends StatelessWidget with LoadingFuture {
         Positioned(
           top: 0,
           left: 0,
-          child: Text('11/29/2023',
+          child: Text('11/29/2023',//TODO poner la fecha real
               style: TextStyle(
                 backgroundColor: Color.fromARGB(91, 0, 0, 0),
                 color: Colors.white,

@@ -1,3 +1,4 @@
+import 'package:animated_floating_buttons/animated_floating_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -17,7 +18,7 @@ class MainMapPage extends StatefulWidget {
 
 class _MainMapPageState extends State<MainMapPage> with NamedAppBar {
   LatLng? myPosition;
-  
+  final MapController _controller = MapController();
   //TODO hacer los metodos de insertar cada una de estas, utilizar paquetes externos de ser necesarios
   final Map<String,Widget> _markers = {
   // Crear un Marker para una poligonal
@@ -57,7 +58,7 @@ class _MainMapPageState extends State<MainMapPage> with NamedAppBar {
 
  @override
   void initState() {
-    getCurrentLocation();
+    getCurrentLocation();    
     super.initState();
   }
 
@@ -68,6 +69,7 @@ class _MainMapPageState extends State<MainMapPage> with NamedAppBar {
       body: myPosition == null
           ? const CircularProgressIndicator()
           : FlutterMap(
+              mapController: _controller,
               options: MapOptions(
                   center: myPosition, minZoom: 5, maxZoom: 25, zoom: 18),
               nonRotatedChildren: [
@@ -77,16 +79,32 @@ class _MainMapPageState extends State<MainMapPage> with NamedAppBar {
               ],
             ),
       floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-           FloatingActionButton(
-            onPressed: (){},
+          FloatingActionButton(
+            onPressed: () async {              
+              getCurrentLocation();              
+            },
             child: const Icon(Icons.gps_not_fixed_outlined),
-           ),
-            FloatingActionButton(
-            onPressed: (){},
-            child: const Icon(Icons.add),
-           ),
+          ),
+          SizedBox.square(dimension: 5,),
+          AnimatedFloatingActionButton(
+            fabButtons: [
+              FloatingActionButton(
+                onPressed: (){
+
+                },
+                child: const Icon(Icons.hexagon_outlined),
+              ),
+              FloatingActionButton(
+                onPressed: (){
+
+                },
+                child: const Icon(Icons.crop_square),
+              )
+            ], 
+            animatedIconData: AnimatedIcons.add_event
+          )
         ],
       ),
     );
@@ -131,6 +149,7 @@ class _MainMapPageState extends State<MainMapPage> with NamedAppBar {
     Position position = await determinePosition();
     setState(() {
       myPosition = LatLng(position.latitude, position.longitude);
+       _controller.fitBounds(LatLngBounds(myPosition, myPosition));
       print(myPosition);
     });
   }

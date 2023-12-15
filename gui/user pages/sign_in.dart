@@ -14,6 +14,7 @@ class SignIn extends StatefulWidget {
 class SignInState extends State<SignIn> with FieldValidate {
   
   //TODO agregar tambien una componente para escoger si es admin o no
+  bool canBeAdmin = false;
   //Para implementaciones futuras se debe de agregar una pantalla para el administrador para validar cuentas
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();  
@@ -84,7 +85,17 @@ class SignInState extends State<SignIn> with FieldValidate {
             controller: _passwordController,
             labelText: 'Contraseña',
           ),
-          sizedBox,
+          CheckboxListTile(
+            secondary: Icon(Icons.add_moderator_outlined),
+            title: Text('Administrador'),
+            value: canBeAdmin, 
+            onChanged: (value){
+              setState((){
+                canBeAdmin = value!;
+              });                            
+            },
+            checkboxShape: CircleBorder(),
+          ),
           signInButton(context),
           TextButton(
             onPressed: () {

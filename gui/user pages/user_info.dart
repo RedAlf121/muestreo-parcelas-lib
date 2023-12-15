@@ -1,11 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:muestreo_parcelas/gui/others/themes_aux.dart';
+import 'package:muestreo_parcelas/utils/mixins/field_validate.dart';
 import 'package:muestreo_parcelas/utils/mixins/loading_mixin.dart';
+import '../../utils/formDialogue.dart';
 import '../../utils/mixins/named_app_bar_mixin.dart';
+import '../../utils/text_box.dart';
 
-class UserInfo extends StatelessWidget with NamedAppBar, LoadingFuture{
+class UserInfo extends StatefulWidget {
   UserInfo({super.key});
+
+  @override
+  State<UserInfo> createState() => _UserInfoState();
+}
+
+class _UserInfoState extends State<UserInfo> with NamedAppBar, LoadingFuture, FieldValidate {
+  final _firstNameController = TextEditingController();
+
+  final _lastNameController = TextEditingController();  
+
+  final _usernameController = TextEditingController();
+
+  final _passwordController = TextEditingController();
+
   final softBorder = RoundedRectangleBorder(borderRadius: BorderRadius.circular(30));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +91,12 @@ class UserInfo extends StatelessWidget with NamedAppBar, LoadingFuture{
           child: Material(
             color: Colors.transparent,
             child: IconButton(
-              onPressed: (){}, 
+              onPressed: (){
+                showDialog(
+                  context: context, 
+                  builder: buildFormDialog
+                );
+              }, 
               icon: const Icon(Icons.edit),
               color: Colors.white,
               iconSize: 40,
@@ -138,9 +161,37 @@ class UserInfo extends StatelessWidget with NamedAppBar, LoadingFuture{
       ),
     );
   }
-  
+
   bool isAdmin() {
     //TODO verificar si es admin o no
     return true;
+  }
+
+  Widget buildFormDialog(BuildContext context) {
+    const sizedBox = SizedBox(height: 10);
+    return FormDialog(
+      title: 'Editar usuario', 
+      form: [
+        ValidatedText.namedTextBox(
+            controller: _firstNameController,
+            labelText: 'Nombre',
+          ),
+          sizedBox,        
+          ValidatedText.namedTextBox(
+            controller: _lastNameController,
+            labelText: 'Apellidos',
+          ),
+          sizedBox,
+          ValidatedText.requiredTextBox(
+            controller: _usernameController,
+            labelText: 'Nombre de Usuario',
+          ),
+          sizedBox,
+          ValidatedText.passwordTextBox(
+            controller: _passwordController,
+            labelText: 'Contraseña',
+          ),
+      ],
+      );
   }
 }

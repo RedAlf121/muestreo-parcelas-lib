@@ -63,7 +63,12 @@ mixin NamedAppBar{
       const Text('Foresba'),
     ];
   }
-  void jumpHome(context){
-    Navigator.popUntil(context, (route) => route.settings.name != homeRoute);
+  void jumpHome(context){    
+    Navigator.popUntil(
+      context, 
+      (route){
+        return route.settings.name == homeRoute;
+      }
+    );
   }
 }
