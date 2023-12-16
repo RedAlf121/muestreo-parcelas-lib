@@ -14,10 +14,11 @@ class ValidatedText{
       validator: Validators.compose(
           validatorList
       ),
+      cursorColor: Colors.greenAccent,
       autofocus: autofocus,
       controller: controller,
       obscureText: password,
-      decoration: InputDecoration(
+      decoration: InputDecoration(        
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
         ),

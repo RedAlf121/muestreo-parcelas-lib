@@ -86,16 +86,16 @@ class SignInState extends State<SignIn> with FieldValidate {
             labelText: 'Contraseña',
           ),
           CheckboxListTile(
-            secondary: Icon(Icons.add_moderator_outlined),
-            title: Text('Administrador'),
+            secondary: const Icon(Icons.add_moderator_outlined),
+            title: const Text('Administrador'),
             value: canBeAdmin, 
             onChanged: (value){
               setState((){
-                canBeAdmin = value!;
+                canBeAdmin = value ?? false;
               });                            
             },
-            checkboxShape: CircleBorder(),
-          ),
+            checkboxShape: const CircleBorder(),
+          ),          
           signInButton(context),
           TextButton(
             onPressed: () {
@@ -112,26 +112,47 @@ class SignInState extends State<SignIn> with FieldValidate {
     return  FutureBuilder(
       future: botonPresionado ? userTaked() : null, //si el botón se ha presionado, llama al future, si no, pasa null
       builder: (context, snapshot) {
-          return TextButton(
+          Widget data;
+          switch(snapshot.connectionState){
+            case ConnectionState.waiting:
+              data = const Center(
+                child: CircularProgressIndicator(
+                   color: Colors.greenAccent,
+              ));
+              break;
+            case ConnectionState.done:
+              data = _buildSignInButton(context);
+            break;
+            case ConnectionState.none:
+              data = _buildSignInButton(context);
+              break;
+            default:
+              data = Container();
+          }
+          return data;
+      },
+    );
+  }
+
+  TextButton _buildSignInButton(BuildContext context) {
+    return TextButton(
             onPressed: () async { //agrega async aquí
-              setState(() {
-                botonPresionado = true; //cambia el estado de la variable a true cuando se presiona el botón
+            setState(() {
+              botonPresionado = true; //cambia el estado de la variable a true cuando se presiona el botón
             });
             if (!passAll()) {              
               errorSnackBar(context: context, errorMessage: 'Hay campos por rellenar');
               return;
             }
-            bool? data = await userTaked(); //agrega await aquí y asigna el resultado a una variable
+           bool? data = await userTaked(); //agrega await aquí y asigna el resultado a una variable
             if(data) {
               errorSnackBar(context: context, errorMessage: 'El usuario ya existe');
               return;
             }
-          goBack();
+            goBack();
           },
           child: const Text('Registrarse'),
           );
-      },
-    );
   }
 
 
@@ -160,7 +181,7 @@ class SignInState extends State<SignIn> with FieldValidate {
   Future<bool> userTaked() async {
     bool check = false;
     final user = await getUser([_usernameController.text]);
-    if(user != null) {
+    if(user != null) {//TODO hay q invertir la condicion esa cuando se tenga acceso a la BD
       check = user.isNotEmpty;
     }
     return check;

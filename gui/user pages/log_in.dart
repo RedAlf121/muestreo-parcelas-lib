@@ -92,27 +92,48 @@ class LogIn extends StatefulWidget {
   Widget loginButton(context) {
     return  FutureBuilder(
       future: botonPresionado ? canLogin() : null, //si el botón se ha presionado, llama al future, si no, pasa null
-      builder: (context, snapshot) {
-          return TextButton(
-            onPressed: () async { //agrega async aquí
-              setState(() {
-                botonPresionado = true; //cambia el estado de la variable a true cuando se presiona el botón
-            });
-            if (!passAll()) {              
-              errorSnackBar(context: context, errorMessage: 'Hay campos por rellenar');
-              return;
-            }
-            bool? data = await canLogin(); //agrega await aquí y asigna el resultado a una variable
-            if(data) {
-              errorSnackBar(context: context, errorMessage: 'Ese usuario no existe. Regístrese si no tiene una cuenta');
-              return;
-            }
-          goHome();
-          },
-          child: const Text('Iniciar sesión'),
-          );
+      builder: (context, snapshot) {           
+           Widget data;
+          switch(snapshot.connectionState){
+            case ConnectionState.waiting:
+              data = const Center(
+                child: CircularProgressIndicator(
+                   color: Colors.greenAccent,
+              ));
+              break;
+            case ConnectionState.done:
+              data = _buildLogInButton(context);
+            break;
+            case ConnectionState.none:
+              data = _buildLogInButton(context);
+              break;
+            default:
+              data = Container();
+          }
+          return data;
       },
     );
+  }
+
+  TextButton _buildLogInButton(BuildContext context) {
+    return TextButton(
+          onPressed: () async { //agrega async aquí
+            setState(() {
+              botonPresionado = true; //cambia el estado de la variable a true cuando se presiona el botón
+          });
+          if (!passAll()) {              
+            errorSnackBar(context: context, errorMessage: 'Hay campos por rellenar');
+            return;
+          }
+          bool? data = await canLogin(); //agrega await aquí y asigna el resultado a una variable
+          if(data) {
+            errorSnackBar(context: context, errorMessage: 'Ese usuario no existe. Regístrese si no tiene una cuenta');
+            return;
+          }
+        goHome();
+        },
+        child: const Text('Iniciar sesión'),
+        );
   }
 
 
