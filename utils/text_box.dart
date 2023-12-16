@@ -18,8 +18,10 @@ class ValidatedText{
       controller: controller,
       obscureText: password,
       decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: labelText,              
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        labelText: labelText,
       ),
     );
   }

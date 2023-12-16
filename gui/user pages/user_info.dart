@@ -7,7 +7,7 @@ import '../../utils/mixins/named_app_bar_mixin.dart';
 import '../../utils/text_box.dart';
 
 class UserInfo extends StatefulWidget {
-  UserInfo({super.key});
+  const UserInfo({super.key});
 
   @override
   State<UserInfo> createState() => _UserInfoState();
@@ -169,7 +169,7 @@ class _UserInfoState extends State<UserInfo> with NamedAppBar, LoadingFuture, Fi
 
   Widget buildFormDialog(BuildContext context) {
     const sizedBox = SizedBox(height: 10);
-    return FormDialog(
+    return FormDialog(    
       title: 'Editar usuario', 
       form: [
         ValidatedText.namedTextBox(

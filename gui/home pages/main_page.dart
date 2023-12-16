@@ -11,8 +11,6 @@ Widget build(BuildContext context) {
   return ListView( 
     padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 30),   
     children: [    
-      buildButtonWithText(context: context, icon: const Icon(Icons.add), text: 'Crear muestreo',func: (){}),
-      sizedBox,
       buildButtonWithText(
         context: context, 
         icon: const Icon(Icons.location_on_outlined), 

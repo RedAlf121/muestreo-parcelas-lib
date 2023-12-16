@@ -18,7 +18,7 @@ class MainMapPage extends StatefulWidget {
 
 class _MainMapPageState extends State<MainMapPage> with NamedAppBar {
   LatLng? myPosition;
-  final MapController _controller = MapController();
+  MapController? _controller;
   //TODO hacer los metodos de insertar cada una de estas, utilizar paquetes externos de ser necesarios
   final Map<String,Widget> _markers = {
   // Crear un Marker para una poligonal
@@ -58,57 +58,93 @@ class _MainMapPageState extends State<MainMapPage> with NamedAppBar {
 
  @override
   void initState() {
-    getCurrentLocation();    
     super.initState();
+    _controller = MapController();
+    getCurrentLocation();    
   }
 
    @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(context: context,text: const Text('Mapa')),
-      body: myPosition == null
-          ? const CircularProgressIndicator()
-          : FlutterMap(
-              mapController: _controller,
-              options: MapOptions(
-                  center: myPosition, minZoom: 5, maxZoom: 25, zoom: 18),
-              nonRotatedChildren: [
-                apiMap(),
-                userCurrentPosition(),
-
-              ],
-            ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () async {              
-              getCurrentLocation();              
-            },
-            child: const Icon(Icons.gps_not_fixed_outlined),
-          ),
-          SizedBox.square(dimension: 5,),
-          AnimatedFloatingActionButton(
-            fabButtons: [
-              FloatingActionButton(
-                onPressed: (){
-
-                },
-                child: const Icon(Icons.hexagon_outlined),
-              ),
-              FloatingActionButton(
-                onPressed: (){
-
-                },
-                child: const Icon(Icons.crop_square),
-              )
-            ], 
-            animatedIconData: AnimatedIcons.add_event
-          )
-        ],
+      appBar: createAppBar(context: context,text: const Text('Mapa')),      
+      body: FutureBuilder(
+        future: getCurrentLocation(),
+        builder: (context, snapshot) {
+          Widget actual = Container();
+          switch(snapshot.connectionState){
+            case ConnectionState.done: 
+              actual = _createMap(); 
+              break;
+            case ConnectionState.waiting: 
+              actual = const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.greenAccent,
+                )
+              );
+              break;
+            default: actual = Container();    
+          }              
+          return actual;
+        },
       ),
+      floatingActionButton: _createFloatingButtons(context),
     );
   }
+
+   Row _createFloatingButtons(BuildContext context) {
+     return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton(
+          heroTag: 'location',
+          onPressed: () async {              
+            await getCurrentLocation();
+            setState((){});              
+          },
+          child: const Icon(Icons.gps_not_fixed_outlined),
+        ),
+        const SizedBox.square(dimension: 5,),          
+        _createAddButtons(context),
+      ],
+    );
+   }
+
+   AnimatedFloatingActionButton _createAddButtons(BuildContext context) {
+     return AnimatedFloatingActionButton(  
+        colorStartAnimation: (Theme.of(context).brightness == Brightness.dark)? const Color.fromARGB(255, 60, 144, 36) : const Color.fromARGB(255, 82, 183, 136),
+        animatedIconData: AnimatedIcons.add_event,
+        fabButtons: [
+          FloatingActionButton(
+            heroTag: 'polygonal',
+            onPressed: (){
+
+            },
+            child: const Icon(Icons.hexagon_outlined),
+          ),
+          FloatingActionButton(
+            heroTag: 'sample',
+            onPressed: (){
+
+            },
+            child: const Icon(Icons.crop_square),
+          )
+        ], 
+      );
+   }
+
+   FlutterMap _createMap() {
+     return FlutterMap(
+            mapController: _controller,
+            options: MapOptions(
+                center: myPosition, minZoom: 5, maxZoom: 25, zoom: 18),
+            nonRotatedChildren: [
+              apiMap(),
+              userCurrentPosition(),
+
+            ],
+          );
+   }
 
    TileLayer apiMap() {
      return TileLayer(
@@ -145,13 +181,10 @@ class _MainMapPageState extends State<MainMapPage> with NamedAppBar {
    }
 
 
-  void getCurrentLocation() async {
+  Future<void> getCurrentLocation() async {
     Position position = await determinePosition();
-    setState(() {
-      myPosition = LatLng(position.latitude, position.longitude);
-       _controller.fitBounds(LatLngBounds(myPosition, myPosition));
-      print(myPosition);
-    });
+    myPosition = LatLng(position.latitude, position.longitude);
+    _controller!.fitBounds(LatLngBounds(myPosition, myPosition));  
   }
 
  
