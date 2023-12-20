@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:muestreo_parcelas/logic/sampling.dart';
 import 'package:postgres/postgres.dart';
 
 mixin FieldValidate{
   List<TextEditingController> controllers = [];
   bool passAll(){
     bool check = !voidComponents();
-    if(!check){
-
-    }
     return check;
   }
   
@@ -21,10 +19,9 @@ mixin FieldValidate{
     return check;
   }
 
-  Future<PostgreSQLResult?> getUser(provider) async {
-    PostgreSQLResult? postgreSQLResult;
-
-    return Future.delayed(const Duration(seconds: 3),()=>postgreSQLResult);
+  Future<void> getUser(List<String>provider) async {
+    
+    singletonSampling.loginUser(provider.first, provider.last);
   }
 
 }

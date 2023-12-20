@@ -104,6 +104,11 @@ class MyAppState extends State<MyApp>{
         size: 32,
         ),
       ),
+      inputDecorationTheme: const InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color:greenColor)
+        )
+      ),
       iconTheme: const IconThemeData(
         size: 36,         
       ),

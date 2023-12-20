@@ -19,7 +19,8 @@ class SignInState extends State<SignIn> with FieldValidate {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();  
   final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();  
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();  
   @override
   void initState() {
     super.initState();
@@ -61,27 +62,32 @@ class SignInState extends State<SignIn> with FieldValidate {
   Widget signInBoxes(context) {
     const sizedBox = SizedBox(height: 10);
     return Form(
+      key: _formKey,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: ListView(
         padding: const EdgeInsets.only(bottom: 40),
         children: <Widget>[                  
           sizedBox,
           ValidatedText.namedTextBox(
+            context: context,
             controller: _firstNameController,
             labelText: 'Nombre',
           ),
           sizedBox,        
           ValidatedText.namedTextBox(
+            context: context,
             controller: _lastNameController,
             labelText: 'Apellidos',
           ),
           sizedBox,
           ValidatedText.requiredTextBox(
+            context: context,
             controller: _usernameController,
             labelText: 'Nombre de Usuario',
           ),
           sizedBox,
           ValidatedText.passwordTextBox(
+            context: context,
             controller: _passwordController,
             labelText: 'Contraseña',
           ),
@@ -140,12 +146,12 @@ class SignInState extends State<SignIn> with FieldValidate {
             setState(() {
               botonPresionado = true; //cambia el estado de la variable a true cuando se presiona el botón
             });
-            if (!passAll()) {              
+            if (!passAll() && !_formKey.currentState!.validate()) {              
               errorSnackBar(context: context, errorMessage: 'Hay campos por rellenar');
               return;
             }
            bool? data = await userTaked(); //agrega await aquí y asigna el resultado a una variable
-            if(data) {
+            if(!data) {
               errorSnackBar(context: context, errorMessage: 'El usuario ya existe');
               return;
             }
@@ -179,11 +185,12 @@ class SignInState extends State<SignIn> with FieldValidate {
   }
   
   Future<bool> userTaked() async {
-    bool check = false;
-    final user = await getUser([_usernameController.text]);
-    if(user != null) {//TODO hay q invertir la condicion esa cuando se tenga acceso a la BD
-      check = user.isNotEmpty;
-    }
+    bool check = true;
+    try{
+      await getUser([_usernameController.text]);
+    }catch(e){
+      check = false;
+    }        
     return check;
   }
 }

@@ -1,23 +1,21 @@
-
-
 import 'package:latlong2/latlong.dart';
-import 'package:muestreo_parcelas/bd/mixins/i_send_data.dart';
+import 'package:muestreo_parcelas/bd/mixins/send_data.dart';
 
-abstract class ISender extends ISendData{
+abstract class ISender extends SendData{
   Future<void> sendPlantData({
-    required int idParcel, 
-    required int idPolyonal, 
-    required LatLng pos, 
-    Map<String,double>? values, 
-    String? specieName, 
-    String? commen, 
-    int? idPlant
-  });
-  Future<void> sendGroundData({
-    required int idMessage,  
-    required int idParcel, 
-    required int idPolygonal, 
-    Map<String,dynamic>? values, 
-    String? commen
-  });
+      required int idParcel,
+      required int idPolyonal,
+      LatLng? pos,
+      Map<String, double>? values,
+      String? specieName,
+      String? commen,
+      int? idPlant});
+  Future<void> sendGroundData(
+      {required int idMessage,
+      required int idParcel,
+      required int idPolygonal,
+      required Map<String, dynamic> values,
+      String? commen});
+
+  
 }

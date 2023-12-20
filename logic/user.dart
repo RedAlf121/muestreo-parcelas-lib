@@ -1,39 +1,34 @@
-
 import 'package:postgres/postgres.dart';
 
-abstract class User{
-  int _id=0;
-  String _userName = '';
-  String _firstName = '';
-  String _lastName = '';
+abstract class User {
+  int? id = 0;
+  String? userName = '';
+  String? firstName = '';
+  String? lastName = '';
+  String? password = '';
 
-  User(PostgreSQLResult result){
-    id = result.first[0];
-    userName = result.first[1];
-    firstName = result.first[2];
-    lastName = result.first[3];
-  }
+  User({this.userName,this.firstName, this.id,this.lastName,this.password});
 
-  // Getters
-  int get id => _id;
-  String get userName => _userName;
-  String get firstName => _firstName;
-  String get lastName => _lastName;
+
 
   // Setters
-  set id(int value) {
-    _id = value;
+  setId(int value) {
+    id = value;
   }
 
-  set userName(String value) {
-    _userName = value;
+  setUserName(String value) {
+    userName = value;
   }
 
-  set firstName(String value) {
-    _firstName = value;
+  setFirstName(String value) {
+    firstName = value;
   }
 
-  set lastName(String value) {
-    _lastName = value;
+  setLastName(String value) {
+    lastName = value;
+  }
+
+  setPassword(String value) {
+    password = value;
   }
 }

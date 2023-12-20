@@ -1,7 +1,8 @@
+import 'package:muestreo_parcelas/bd/mixins/logic_instance.dart';
 
-mixin Crud<T> {  
-  Future<void> insert(String query, bool isQuery);
-  Future<T> delete(String query, bool isQuery, int index);
-  Future<void> update(String query, bool isQuery, int index, T parameter);
-  Future<T> read(String query, bool isQuery, int index);
+abstract class Crud<T> extends LogicInstance<T>{
+  Future<T> insert();//devuelve la instancia creada
+  Future<T> delete();//devuelve la instancia eliminada
+  Future<T> update(T parameter);//devuelve la instancia modificada
+  Future<T> read();//devuelve la instancia leida
 }

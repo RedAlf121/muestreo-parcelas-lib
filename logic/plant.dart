@@ -3,48 +3,50 @@ import 'package:latlong2/latlong.dart';
 import 'package:muestreo_parcelas/logic/plant_comment.dart';
 
 class Plant {
-  String _stratum;
-  double _height;
-  double _shaftheight;
-  LatLng _position;
-  double _ewdiameter;
-  double _nsdiameter;
-  String _specie;
-  List<PlantComment> _plantcommentlist;
+  int? _id;
+  String? _stratum;
+  double? _height;
+  double? _shaftheight;
+  LatLng? _position;
+  double? _ewdiameter;
+  double? _nsdiameter;
+  String? _specie;
+  List<PlantComment>? _plantcommentlist;
   Plant(this._stratum, this._height, this._shaftheight, this._position,
       this._ewdiameter, this._nsdiameter, this._specie, this._plantcommentlist);
 
   //Getters
+  int get id=>_id!;
   String get stratum {
-    return _stratum;
+    return _stratum!;
   }
 
   double get height {
-    return _height;
+    return _height!;
   }
 
   double get shaftHeight {
-    return _shaftheight;
+    return _shaftheight!;
   }
 
   LatLng get position {
-    return _position;
+    return _position!;
   }
 
   double get ewdiamter {
-    return _ewdiameter;
+    return _ewdiameter!;
   }
 
   double getNsdiameter() {
-    return _nsdiameter;
+    return _nsdiameter!;
   }
 
   String getSpecie() {
-    return _specie;
+    return _specie!;
   }
 
   List<PlantComment> getPlantcommentlist() {
-    return _plantcommentlist;
+    return _plantcommentlist!;
   }
 
   //Setters

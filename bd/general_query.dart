@@ -2,28 +2,29 @@ import 'dart:convert';
 
 import 'package:muestreo_parcelas/utils/config.dart';
 import 'package:postgres/postgres.dart';
+//prueba momentanea xq coger los datos de un json no funciona correctamente
 
-final conn = PostgreSQLConnection(
-  get('ip'),
-  int.parse(get('port')),
-  get('database'),
-  username: get('user'),
-  password: utf8.decode(get('password').split(',').map(int.parse).toList())
-);
 
 abstract class GeneralQuery {
-  
-  Future<dynamic> execute<PostgreSQLResult>({
-    required String query, 
-    bool isQuery = false
-  }) async {
-
-    final result;
+  Future<Map<String,dynamic>> execute<PostgreSQLResult>(
+      {required String query,
+      bool isQuery = true,
+      Map<String, dynamic>? parameters}) async {
+    Map<String,dynamic> mapResult = {};
+    final conn = PostgreSQLConnection(
+    '152.206.175.49',5432,'MuestreoParcelas',
+    username: 'postgres',
+    password: 'pi3141592653589793'
+    );
+    await conn.open();
     if (isQuery) {
-      result = await conn.query(query);
+      final result = await conn.query(query, substitutionValues: parameters);//obtenemos la query
+      // ignore: avoid_function_literals_in_foreach_calls
+      result.forEach((element) => mapResult.addAll(element.toColumnMap()));//convertimos a mapa        
     } else {
-      result = await conn.execute(query);
+      await conn.execute(query, substitutionValues: parameters);
     }
-    return result;
+    await conn.close();
+    return mapResult;
   }
 }

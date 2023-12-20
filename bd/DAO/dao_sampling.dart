@@ -1,45 +1,16 @@
-import 'package:postgres/src/execution_context.dart';
 
-import '../mixins/i_report.dart';
+import 'package:muestreo_parcelas/bd/mixins/sampling_reports.dart';
+
 import '../general_query.dart';
 
-class SamplingDAO extends GeneralQuery with IReport {
-  
-  
+class SamplingDAO extends GeneralQuery implements SamplingReports{
+  @override
+  Future<Map<String, dynamic>> allParcels()async => await execute(query: 'SELECT * FROM func_all_parcels');
 
   @override
-  Future<PostgreSQLResult> treeDistance(int polygonalIndex, int parcelIndex) async {
-    // TODO: implement treeDistance
-    throw UnimplementedError();
-  }
-  
+  Future<Map<String, dynamic>> allPlants()async => await execute(query: 'SELECT * FROM func_all_plants');
+
   @override
-  Future<PostgreSQLResult> countByStatrum(int polygonalIndex, String stratum) async {
-    // TODO: implement countByStatrum
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<PostgreSQLResult> flowerInventroy(int polygonalIndex, String stratum) async {
-    // TODO: implement flowerInventroy
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<PostgreSQLResult> loginUser({required String userName, required String password}) async {
-    // TODO: implement loginUser
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<PostgreSQLResult> parcelPoints(int polygonalIndex) async {
-    // TODO: implement parcelPoints
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<void> signInUser(List<String> fields, bool isAdmin) {
-    // TODO: implement signInUser
-    throw UnimplementedError();
-  }
+  Future<Map<String, dynamic>> allPolygonals()async => await execute(query: 'SELECT * FROM func_all_polygonals');
+
 }

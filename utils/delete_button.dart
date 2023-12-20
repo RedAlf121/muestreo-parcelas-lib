@@ -4,7 +4,6 @@ import 'package:muestreo_parcelas/utils/my_dialog.dart';
 int _deleteIndex = 0;
 class DeleteButton extends StatelessWidget {
   final String title;
-  
   final double? buttonSize;
 
   final String prompt;

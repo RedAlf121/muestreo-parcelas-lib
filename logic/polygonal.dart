@@ -1,43 +1,54 @@
-import 'dart:math';
+import 'package:latlong2/latlong.dart';
 import 'package:muestreo_parcelas/logic/parcel.dart';
 
 class Polygonal {
-  int _id;
-  List<Point> _points;
-  List<Parcel> _parcellist;
+  int? id;
+  List<LatLng>? points = [];
+  final List<Parcel> parcellist = [];
+  String? region;
 
-  Polygonal(this._id, this._points, this._parcellist);
+  Polygonal({this.id, this.points,this.region});
+
+  //Setters
+  void setId(int id) {
+    this.id = id;
+  }
+  Parcel findParcel(int id){
+    return parcellist.firstWhere((element) => element.idSample == id);
+  }
+  void addParcel(Parcel parcel) => parcellist.add(parcel);
 
   //Getters
   int getId() {
-    return _id;
+    return id!;
   }
 
-  List<Point> getPoints() {
-    return _points;
+  String getRegion() {
+    return region!;
+  }
+
+  List<LatLng> getPoints() {
+    return points!;
   }
 
   List<Parcel> getParcellist() {
-    return _parcellist;
+    return parcellist;
   }
 
-  void setParcellist(List<Parcel> parcellist) {
-    _parcellist = parcellist;
-  }
   // Función que calcula el área de un polígono dado un arreglo de sus vértices
-double area(){
-  double area = 0;
-  int n = _points.length;
-  // Se aplica la fórmula del área de Gauss
-  for (int i = 0; i < n; i++) {
-    int j = (i + 1) % n; // Índice del vértice siguiente
-    int k = (i - 1) % n; // Índice del vértice anterior
-    // Se suma el producto cruz de los vértices
-    area += _points[i].x * (_points[j].y - _points[k].y);
+  double area() {
+    double area = 0;
+    int n = points!.length;
+    // Se aplica la fórmula del área de Gauss
+    for (int i = 0; i < n; i++) {
+      int j = (i + 1) % n; // Índice del vértice siguiente
+      int k = (i - 1) % n; // Índice del vértice anterior
+      // Se suma el producto cruz de los vértices
+      area += points![i].latitude *
+          (points![j].longitude - points![k].longitude);
+    }
+    // Se divide entre dos y se toma el valor absoluto
+    area = (area / 2).abs();
+    return area;
   }
-  // Se divide entre dos y se toma el valor absoluto
-  area = (area / 2).abs();
-  return area;
-}
-
 }

@@ -173,23 +173,27 @@ class _UserInfoState extends State<UserInfo> with NamedAppBar, LoadingFuture, Fi
       title: 'Editar usuario', 
       form: [
         ValidatedText.namedTextBox(
+            context: context,            
             controller: _firstNameController,
             labelText: 'Nombre',
           ),
           sizedBox,        
           ValidatedText.namedTextBox(
+            context: context,
             controller: _lastNameController,
             labelText: 'Apellidos',
           ),
           sizedBox,
           ValidatedText.requiredTextBox(
+            context: context,
             controller: _usernameController,
             labelText: 'Nombre de Usuario',
           ),
           sizedBox,
           ValidatedText.passwordTextBox(
+            context: context,
             controller: _passwordController,
-            labelText: 'Contraseña',
+            labelText: 'Contraseña',            
           ),
       ],
       );

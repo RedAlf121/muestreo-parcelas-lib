@@ -19,9 +19,16 @@ Widget build(BuildContext context) {
           Navigator.pushNamed(context, 'main_map');
         }),          
       sizedBox,
-      buildButtonWithText(context: context, icon: const Icon(Icons.document_scanner), text: 'Exportar a Excel',func: (){}),
+      buildButtonWithText(
+        context: context, 
+        icon: const Icon(Icons.document_scanner), 
+        text: 'Importar de PDF',
+        func: (){
+          //Saltar para la ventana mostrar los reportes ya hechos en excel
+        }
+      ),
       sizedBox,
-      buildButtonWithText(context: context, icon: const Icon(Icons.help_outline), text: 'Ayuda',func: (){}),
+      buildButtonWithText(context: context, icon: const Icon(Icons.help_outline), text: 'Ayuda',func: (){}),//Pendiente a futuras versiones
     ],
   );
 }

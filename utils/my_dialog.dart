@@ -16,7 +16,7 @@ class MyDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(        
+    return AlertDialog(                
         shape: _choose(borderShape,defaultBorderShape) as ShapeBorder?,
         icon: _choose(icon,defaultIcon) as Icon,
         iconColor: iconColor,
